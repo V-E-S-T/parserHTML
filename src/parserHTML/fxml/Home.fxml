@@ -38,27 +38,27 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <Button fx:id="btnRespTime" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleButtonClicks" prefHeight="181.0" prefWidth="242.0" stylesheets="@../css/fullpackstyling.css" text="Server Responce Time">
+                <Button fx:id="btnRespTime" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleButtonClicks" prefHeight="181.0" prefWidth="242.0" stylesheets="@../../css/fullpackstyling.css" text="Server Responce Time">
                     <graphic>
                     </graphic>
                 </Button>
-                <Button fx:id="btnTitle" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleButtonClicks" prefHeight="181.0" prefWidth="242.0" stylesheets="@../css/fullpackstyling.css" text="Title" GridPane.columnIndex="1">
+                <Button fx:id="btnTitle" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleButtonClicks" prefHeight="181.0" prefWidth="242.0" stylesheets="@../../css/fullpackstyling.css" text="Title" GridPane.columnIndex="1">
                     <graphic>
                     </graphic>
                 </Button>
-                <Button fx:id="btnDescription" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleButtonClicks" prefHeight="181.0" prefWidth="242.0" stylesheets="@../css/fullpackstyling.css" text="Description" GridPane.columnIndex="2">
+                <Button fx:id="btnDescription" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleButtonClicks" prefHeight="181.0" prefWidth="242.0" stylesheets="@../../css/fullpackstyling.css" text="Description" GridPane.columnIndex="2">
                     <graphic>
                     </graphic>
                 </Button>
-                <Button fx:id="btnImages" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleButtonClicks" prefHeight="181.0" prefWidth="242.0" stylesheets="@../css/fullpackstyling.css" text="Images" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                <Button fx:id="btnImages" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleButtonClicks" prefHeight="181.0" prefWidth="242.0" stylesheets="@../../css/fullpackstyling.css" text="Images" GridPane.columnIndex="2" GridPane.rowIndex="1">
                     <graphic>
                     </graphic>
                 </Button>
-                <Button fx:id="btnLinks" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleButtonClicks" prefHeight="181.0" prefWidth="242.0" stylesheets="@../css/fullpackstyling.css" text="Links" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <Button fx:id="btnLinks" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleButtonClicks" prefHeight="181.0" prefWidth="242.0" stylesheets="@../../css/fullpackstyling.css" text="Links" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <graphic>
                     </graphic>
                 </Button>
-                <Button fx:id="btn_h1_Tag" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleButtonClicks" prefHeight="181.0" prefWidth="242.0" stylesheets="@../css/fullpackstyling.css" text="H1 Tags" GridPane.rowIndex="1">
+                <Button fx:id="btn_h1_Tag" contentDisplay="TOP" mnemonicParsing="false" onAction="#handleButtonClicks" prefHeight="181.0" prefWidth="242.0" stylesheets="@../../css/fullpackstyling.css" text="H1 Tags" GridPane.rowIndex="1">
                     <graphic>
                     </graphic>
                 </Button>
@@ -75,6 +75,6 @@
             <TextArea fx:id="resultField" editable="false" prefHeight="200.0" prefWidth="622.0" wrapText="true" />
          </children>
       </Pane>
-      <Button fx:id="btnSave" contentDisplay="TOP" layoutX="351.0" layoutY="574.0" mnemonicParsing="false" onAction="#handleButtonClicks" prefHeight="37.0" prefWidth="242.0" stylesheets="@../css/fullpackstyling.css" text="Save Result" />
+      <Button fx:id="btnSave" contentDisplay="TOP" layoutX="351.0" layoutY="574.0" mnemonicParsing="false" onAction="#handleButtonClicks" prefHeight="37.0" prefWidth="242.0" stylesheets="@../../css/fullpackstyling.css" text="Save Result" />
     </children>
 </AnchorPane>
