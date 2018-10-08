@@ -1,22 +1,28 @@
 package parserHTML.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -42,13 +48,16 @@ public class Controller implements Initializable{
     private Button btn_h1_Tag;
 
     @FXML
+    private Button btnSave;
+
+    @FXML
     private TextField textField;
 
     @FXML
     private TextArea resultField;
 
     @FXML
-    private void handleButtonClicks(javafx.event.ActionEvent mouseEvent) {
+    private void handleButtonClicks(ActionEvent mouseEvent) {
         if (mouseEvent.getSource() == btnRespTime) {
             responseTimeHandler(textField.getText());
         } else if (mouseEvent.getSource() == btnTitle) {
@@ -61,6 +70,8 @@ public class Controller implements Initializable{
             refHandler(textField.getText());
         } else if (mouseEvent.getSource() == btnImages) {
             imageHandler(textField.getText());
+        } else if (mouseEvent.getSource() == btnSave) {
+            saveHandler(mouseEvent);
         }
     }
 
@@ -116,7 +127,7 @@ public class Controller implements Initializable{
             StringBuilder result = new StringBuilder("");
             Document document = Jsoup.connect(link).get();
             Elements elements = document.getElementsByTag("h1");
-            elements.forEach(element -> result.append("\n" + element.ownText()));
+            elements.forEach(element -> result.append("\n" + element.ownText() + "\r\n"));
             resultField.setText(result.toString().trim());
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,7 +144,7 @@ public class Controller implements Initializable{
 
             for (Element ref : elementLinks) {
 
-                result = result.append("\n" + ref.attr("href") + " : " + ref.text());
+                result = result.append("\n" + ref.attr("href") + " : " + ref.text() + "\r\n");
 
             }
             resultField.setText(result.toString().trim());
@@ -151,12 +162,43 @@ public class Controller implements Initializable{
             Elements images = document.select("img[src~=(?i)\\.(png|jpe?g|gif)]");
             for (Element image : images) {
 
-                result = result.append("\nsrc : " + image.attr("src"));
+                result = result.append("\nsrc : " + image.attr("src") + "\r\n");
             }
             resultField.setText(result.toString().trim());
         } catch (Exception e) {
             e.printStackTrace();
             resultField.setText("Please enter a valid link");
+        }
+    }
+
+    private void saveHandler(ActionEvent mouseEvent) {
+
+        FileChooser fileChooser = new FileChooser();
+
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        Node source = (Node) mouseEvent.getSource();
+        Window theStage = source.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(theStage);
+
+
+        if(file != null){
+            SaveFile(resultField.getText(), file);
+        }
+    }
+
+    private void SaveFile(String content, File file){
+        try {
+            FileWriter fileWriter;
+
+            fileWriter = new FileWriter(file);
+            fileWriter.write(content);
+            fileWriter.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            resultField.setText("File not saved");
         }
     }
 }
