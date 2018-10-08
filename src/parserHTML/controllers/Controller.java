@@ -20,6 +20,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -27,7 +29,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+@org.springframework.stereotype.Controller
 public class Controller implements Initializable{
+
+    @Autowired
+    private Handler handler;
 
     @FXML
     private Button btnRespTime;
@@ -59,7 +65,9 @@ public class Controller implements Initializable{
     @FXML
     private void handleButtonClicks(ActionEvent mouseEvent) {
         if (mouseEvent.getSource() == btnRespTime) {
-            responseTimeHandler(textField.getText());
+            String result = handler.responseTimeHandler(textField.getText());
+            resultField.setText(result);
+            //responseTimeHandler(textField.getText());
         } else if (mouseEvent.getSource() == btnTitle) {
             titleHandler(textField.getText());
         } else if (mouseEvent.getSource() == btnDescription) {
