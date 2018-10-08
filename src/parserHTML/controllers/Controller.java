@@ -113,8 +113,14 @@ public class Controller implements Initializable{
 
             String description;
             Document document = Jsoup.connect(link).get();
-            description = document.select("meta[name=description]").first().attr("content");
-            resultField.setText(description);
+            Elements elements = document.select("meta[name=description]");
+            Element el = elements.first();
+            if(el != null){
+                description = el.attr("content");
+                resultField.setText(description);
+            } else {
+                resultField.setText("Parameter 'description' not found");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             resultField.setText("Please enter a valid link");
