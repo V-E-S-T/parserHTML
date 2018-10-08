@@ -6,14 +6,20 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class Controller implements Initializable{
 
@@ -39,24 +45,23 @@ public class Controller implements Initializable{
     private TextField textField;
 
     @FXML
-    private TextField resultField;
+    private TextArea resultField;
 
     @FXML
     private void handleButtonClicks(javafx.event.ActionEvent mouseEvent) {
         if (mouseEvent.getSource() == btnRespTime) {
-            loadStage("/parserHTML/fxml/ResponseTime.fxml");
+            responseTimeHandler(textField.getText());
         } else if (mouseEvent.getSource() == btnTitle) {
-            loadStage("/parserHTML/fxml/Title.fxml");
+            titleHandler(textField.getText());
         } else if (mouseEvent.getSource() == btnDescription) {
-            loadStage("/parserHTML/fxml/Description.fxml");
-        } else if (mouseEvent.getSource() == btnImages) {
-            loadStage("/parserHTML/fxml/Images.fxml");
-        } else if (mouseEvent.getSource() == btnLinks) {
-            loadStage("/parserHTML/fxml/Links.fxml");
+            descriptionHandler(textField.getText());
         } else if (mouseEvent.getSource() == btn_h1_Tag) {
-            loadStage("/parserHTML/fxml/h1_Tag.fxml");
+            h1_Handler(textField.getText());
+        } else if (mouseEvent.getSource() == btnLinks) {
+            refHandler(textField.getText());
+        } else if (mouseEvent.getSource() == btnImages) {
+            imageHandler(textField.getText());
         }
-
     }
 
     @Override
@@ -64,29 +69,94 @@ public class Controller implements Initializable{
 
     }
 
-    private void loadStage(String fxml) {
+    private void responseTimeHandler(String link) {
         try {
-            //FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
-            Parent root = FXMLLoader.load(getClass().getResource(fxml));
-            //ResponseTimeController responseTimeController = loader.getController();
-            //responseTimeController.initData(textField.getText());
 
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-
-            //stage.getIcons().add(new Image("/home/icons/icon.png"));
-
-            stage.initModality(Modality.APPLICATION_MODAL);
-
-
-
-            stage.show();
-        } catch (IOException e) {
+            double responseTime;
+            Long startTime = System.nanoTime();
+            Connection.Response response = Jsoup.connect(link).execute();
+            Long endTime = System.nanoTime();
+            responseTime = (endTime - startTime)/1000000000.0;
+            resultField.setText(String.valueOf(responseTime));
+        } catch (Exception e) {
             e.printStackTrace();
+            resultField.setText("Please enter a valid link");
         }
     }
 
-    public String getLink(){
-        return textField.getText();
+    private void titleHandler(String link) {
+        try {
+
+            String title;
+            Document document = Jsoup.connect(link).get();
+            title = document.title();
+            resultField.setText(title);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultField.setText("Please enter a valid link");
+        }
+    }
+
+    private void descriptionHandler(String link) {
+        try {
+
+            String description;
+            Document document = Jsoup.connect(link).get();
+            description = document.select("meta[name=description]").first().attr("content");
+            resultField.setText(description);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultField.setText("Please enter a valid link");
+        }
+    }
+
+    private void h1_Handler(String link) {
+        try {
+
+            StringBuilder result = new StringBuilder("");
+            Document document = Jsoup.connect(link).get();
+            Elements elements = document.getElementsByTag("h1");
+            elements.forEach(element -> result.append("\n" + element.ownText()));
+            resultField.setText(result.toString().trim());
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultField.setText("Please enter a valid link");
+        }
+    }
+
+    private void refHandler(String link) {
+        try {
+
+            StringBuilder result = new StringBuilder("");
+            Document document = Jsoup.connect(link).get();
+            Elements elementLinks = document.select("a[href]");
+
+            for (Element ref : elementLinks) {
+
+                result = result.append("\n" + ref.attr("href") + " : " + ref.text());
+
+            }
+            resultField.setText(result.toString().trim());
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultField.setText("Please enter a valid link");
+        }
+    }
+
+    private void imageHandler(String link) {
+        try {
+
+            StringBuilder result = new StringBuilder("");
+            Document document = Jsoup.connect(link).get();
+            Elements images = document.select("img[src~=(?i)\\.(png|jpe?g|gif)]");
+            for (Element image : images) {
+
+                result = result.append("\nsrc : " + image.attr("src"));
+            }
+            resultField.setText(result.toString().trim());
+        } catch (Exception e) {
+            e.printStackTrace();
+            resultField.setText("Please enter a valid link");
+        }
     }
 }
